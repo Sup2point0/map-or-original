@@ -12,6 +12,26 @@ mod primitives
 	}
 }
 
+mod references
+{
+	use super::*;
+
+	#[test] fn shared()
+	{
+		let s = "sup".to_string();
+		let t: &str = &s;
+		assert_eq!( t.map_or_orig(|_| None), t );
+		assert_eq!( t.map_or_orig(|x| Some(&x[1..])), "up" );
+	}
+
+	#[test] fn exclusive()
+	{
+		let mut s = "sup".to_string();
+		let t: &mut str = &mut s;
+		assert_eq!( (t as &str).map_or_orig(|x| Some(&x[1..])), "up" );
+	}
+}
+
 mod enums
 {
 	use super::*;
